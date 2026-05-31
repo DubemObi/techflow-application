@@ -1,0 +1,25 @@
+{
+  "name": "techflow-inventory-api",
+  "version": "1.0.0",
+  "description": "TechFlow Solutions — Inventory Management API for boutique retailers",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test":  "jest --forceExit --detectOpenHandles",
+    "test:coverage": "jest --coverage --forceExit --detectOpenHandles"
+  },
+  "keywords": ["techflow", "inventory", "api", "express"],
+  "author": "TechFlow Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest":       "^29.7.0",
+    "supertest":  "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"]
+  }
+}
