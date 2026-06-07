@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN chmod +x scripts/health-check.sh
+RUN chmod +x /app/scripts/health-check.sh
 
 EXPOSE 3000
 
