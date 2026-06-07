@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN chmod +x scripts/health-check.sh
+
 EXPOSE 3000
 
 CMD ["npm", "start"]

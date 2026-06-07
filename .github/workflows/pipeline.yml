@@ -38,6 +38,17 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME}}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Backup Current Image Tag
+              run: |
+                docker pull ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:latest || true
+                docker tag \
+                ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:latest \
+                ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:previous || true
+
+            - name: Push Previous Tag
+              run: |
+               docker push ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:previous || true
+
             - name: Build Docker Image
               run: |
                 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techflow-api:latest .
@@ -69,3 +80,22 @@ jobs:
                         --name techflow-api \
                         -p 3000:3000 \
                         ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:latest
+
+                    sleep 15
+
+                    docker exec techflow-api ./scripts/healthcheck.sh
+
+                    if [ $? -ne 0 ]; then
+                        echo "Health check failed. Starting rollback..."
+                        
+                        docker stop techflow-api || true
+                        docker rm techflow-api || true
+
+                        docker pull ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:previous
+
+                        docker run -d --name techflow-api -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:previous
+
+                        exit 1
+                    fi
+
+                    echo "Deployment Successful"
