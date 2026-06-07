@@ -83,7 +83,7 @@ jobs:
 
                     sleep 15
 
-                    docker exec techflow-api ./scripts/health-check.sh
+                    docker exec techflow-api /app/scripts/health-check.sh
 
                     if [ $? -ne 0 ]; then
                         echo "Health check failed. Starting rollback..."
