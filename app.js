@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
  * Used by the rollback health check script (scripts/healthcheck.sh).
  */
 app.get('/health', (req, res) => {
-  res.status(200).json({
+  res.status(500).json({
     status:    'healthy',
     timestamp: new Date().toISOString(),
     uptime:    process.uptime(),
