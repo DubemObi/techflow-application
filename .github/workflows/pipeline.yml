@@ -99,3 +99,39 @@ jobs:
                     fi
 
                     echo "Deployment Successful"
+
+
+    notify:
+        needs: deploy-to-ec2
+        runs-on: ubuntu-latest
+        if: always()
+
+        steps:
+            - name: Set deploy status message
+              id: status
+              run: |
+                if [ "${{ needs.deploy-to-ec2.result }}" == "success" ]; then
+                echo "STATUS=✅ SUCCESS" >> $GITHUB_OUTPUT
+                else
+                echo "STATUS=❌ FAILED" >> $GITHUB_OUTPUT
+                fi
+            - name: Send Gmail notification
+              uses: dawidd6/action-send-mail@v3
+              with:
+                server_address: smtp.gmail.com
+                server_port: 465
+                secure: true
+                username: ${{ secrets.GMAIL_SENDER }}
+                password: ${{ secrets.GMAIL_APP_PASSWORD }}
+                to: ${{ secrets.NOTIFY_EMAIL }}
+                from: TechFlow CI/CD <${{ secrets.GMAIL_SENDER }}>
+                subject: "[${{ steps.status.outputs.STATUS }}] TechFlow Deploy - ${{ github.ref_name }}"
+                html_body: |
+                    <h2>🚀 TechFlow Deployment Report</h2>
+                    <p><strong>Status:</strong> ${{ steps.status.outputs.STATUS }}</p>
+                    <p><strong>Commit:</strong> ${{ github.sha }}</p>
+                    <p><strong>Author:</strong> ${{ github.actor }}</p>
+                    <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
+                    <p><a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">
+                        View Pipeline Run
+                    </a></p>
