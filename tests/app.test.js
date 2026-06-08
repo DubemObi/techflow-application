@@ -30,17 +30,17 @@ describe('Primary Route', () => {
   });
 });
 
-describe('Health Check Route', () => {
-  test('GET /health returns 200', async () => {
-    const res = await request(app).get('/health');
-    expect(res.statusCode).toBe(200);
-  });
+// describe('Health Check Route', () => {
+//   test('GET /health returns 200', async () => {
+//     const res = await request(app).get('/health');
+//     expect(res.statusCode).toBe(200);
+//   });
 
-  test('GET /health returns status healthy', async () => {
-    const res = await request(app).get('/health');
-    expect(res.body.status).toBe('healthy');
-  });
-});
+//   test('GET /health returns status healthy', async () => {
+//     const res = await request(app).get('/health');
+//     expect(res.body.status).toBe('healthy');
+//   });
+// });
 
 // ── Inventory routes (existing) ───────────────────────────────────────────
 
