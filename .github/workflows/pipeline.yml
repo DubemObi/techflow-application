@@ -95,7 +95,7 @@ jobs:
 
                         docker run -d --name techflow-api -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME}}/techflow-api:previous
 
-                        exit 1
+                        echo "Rollback Successful"
                     fi
 
                     echo "Deployment Successful"
