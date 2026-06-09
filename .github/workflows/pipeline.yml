@@ -127,11 +127,66 @@ jobs:
                 from: TechFlow CI/CD <${{ secrets.GMAIL_SENDER }}>
                 subject: "[${{ steps.status.outputs.STATUS }}] TechFlow Deploy - ${{ github.ref_name }}"
                 html_body: |
-                    <h2>🚀 TechFlow Deployment Report</h2>
-                    <p><strong>Status:</strong> ${{ steps.status.outputs.STATUS }}</p>
-                    <p><strong>Commit:</strong> ${{ github.sha }}</p>
-                    <p><strong>Author:</strong> ${{ github.actor }}</p>
-                    <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
-                    <p><a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">
-                        View Pipeline Run
-                    </a></p>
+                    <div style="max-width:580px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+                        <!-- Header -->
+                        <div style="background:#0f0f0f;border-radius:12px 12px 0 0;padding:28px 32px;display:flex;align-items:center;gap:14px;">
+                        <div style="width:40px;height:40px;border-radius:8px;background:#1a1a1a;border:0.5px solid #333;display:flex;align-items:center;justify-content:center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                            <p style="font-size:15px;font-weight:500;color:#fff;margin:0;">TechFlow CI/CD</p>
+                            <p style="font-size:12px;color:#888;margin:2px 0 0;">Deployment notification</p>
+                        </div>
+                        </div>
+
+                        <!-- Body -->
+                        <div style="background:#fff;border:0.5px solid #e5e5e5;border-top:none;padding:28px 32px;">
+
+                        <!-- Status banner -->
+                        ${{ steps.status.outputs.STATUS == '✅ SUCCESS' && '
+                        <div style="background:#eaf3de;border:0.5px solid #639922;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+                            <div style="width:8px;height:8px;border-radius:50%;background:#3b6d11;flex-shrink:0;"></div>
+                            <span style="font-size:14px;font-weight:500;color:#27500a;">Deployment succeeded on <strong>${{ github.ref_name }}</strong></span>
+                        </div>' || '
+                        <div style="background:#fcebeb;border:0.5px solid #e24b4a;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+                            <div style="width:8px;height:8px;border-radius:50%;background:#a32d2d;flex-shrink:0;"></div>
+                            <span style="font-size:14px;font-weight:500;color:#791f1f;">Deployment failed on <strong>${{ github.ref_name }}</strong></span>
+                        </div>'}}
+
+                        <!-- Meta grid -->
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+                            <div style="background:#f7f7f5;border-radius:8px;padding:12px 14px;">
+                            <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin:0 0 4px;">Commit</p>
+                            <p style="font-size:13px;font-weight:500;color:#1a1a1a;margin:0;font-family:monospace;">${{ github.sha }}</p>
+                            </div>
+                            <div style="background:#f7f7f5;border-radius:8px;padding:12px 14px;">
+                            <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin:0 0 4px;">Branch</p>
+                            <p style="font-size:13px;font-weight:500;color:#1a1a1a;margin:0;font-family:monospace;">${{ github.ref_name }}</p>
+                            </div>
+                            <div style="background:#f7f7f5;border-radius:8px;padding:12px 14px;">
+                            <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin:0 0 4px;">Triggered by</p>
+                            <p style="font-size:13px;font-weight:500;color:#1a1a1a;margin:0;">${{ github.actor }}</p>
+                            </div>
+                            <div style="background:#f7f7f5;border-radius:8px;padding:12px 14px;">
+                            <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin:0 0 4px;">Run ID</p>
+                            <p style="font-size:13px;font-weight:500;color:#1a1a1a;margin:0;font-family:monospace;">${{ github.run_id }}</p>
+                            </div>
+                        </div>
+
+                        <hr style="height:0.5px;background:#e5e5e5;border:none;margin:24px 0;">
+
+                        <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                            style="display:inline-block;background:#1a1a1a;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:13px;font-weight:500;">
+                            View pipeline run →
+                        </a>
+                        </div>
+
+                        <!-- Footer -->
+                        <div style="background:#f7f7f5;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 12px 12px;padding:16px 32px;display:flex;justify-content:space-between;">
+                        <span style="font-size:11px;color:#999;">TechFlow · GitHub Actions</span>
+                        <span style="font-size:11px;color:#999;">${{ github.repository }}</span>
+                        </div>
+
+                    </div>
+               
