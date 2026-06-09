@@ -112,11 +112,15 @@ jobs:
               run: |
                 if [ "${{ needs.deploy-to-ec2.result }}" == "success" ]; then
                 echo "STATUS=✅ SUCCESS" >> $GITHUB_OUTPUT
+                echo "MESSAGE=succeeded" >> $GITHUB_OUTPUT
                 else
                 echo "STATUS=❌ FAILED" >> $GITHUB_OUTPUT
+                echo "MESSAGE=failed" >> $GITHUB_OUTPUT
                 fi
             - name: Send Gmail notification
               uses: dawidd6/action-send-mail@v3
+              env:
+                BRANCH: ${{ github.ref_name }}
               with:
                 server_address: smtp.gmail.com
                 server_port: 465
@@ -151,7 +155,7 @@ jobs:
                         </div>' || '
                         <div style="background:#fcebeb;border:0.5px solid #e24b4a;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px;">
                             <div style="width:8px;height:8px;border-radius:50%;background:#a32d2d;flex-shrink:0;"></div>
-                            <span style="font-size:14px;font-weight:500;color:#791f1f;">Deployment failed on <strong>${{ github.ref_name }}</strong></span>
+                            <span style="font-size:14px;font-weight:500;color:#791f1f;">Deployment ${{ steps.status.outputs.MESSAGE }} on <strong>${{ env.BRANCH }}</strong></span>
                         </div>'}}
 
                         <!-- Meta grid -->
